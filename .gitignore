@@ -43,3 +43,10 @@ hs_err_pid*
 .idea
 *.iml
 out
+
+# Visual studio project
+obj
+*.sln
+.vs
+*.csproj
+*.csproj.user
