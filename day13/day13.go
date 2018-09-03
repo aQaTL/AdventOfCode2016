@@ -35,19 +35,34 @@ func main() {
 	fmt.Println(LeeAlgorithm(maze, sideSize, srcCoord, dstCoord))
 
 	//Part two
-	counter := 0
+	stepsC := make(chan int)
+
 	for y := 0; y < sideSize; y++ {
 		for x := 0; x < sideSize; x++ {
-			maze = GenMaze(sideSize, input)
-			if maze[y*sideSize+x] == 0 {
-				if steps := LeeAlgorithm(maze, sideSize, srcCoord, Coord{x, y});
-					steps != -1 && steps <= 50 {
-					counter++
+			go func(x, y int) {
+				if maze[y*sideSize+x] == -1 {
+					stepsC <- -1
+				} else {
+					stepsC <- LeeAlgorithm(
+						GenMaze(sideSize, input),
+						sideSize,
+						Coord{1, 1},
+						Coord{x, y},
+					)
 				}
-			}
+			}(x, y)
 		}
 	}
-	fmt.Println(counter)
+
+	locations := 0
+	for i := 0; i < sideSize*sideSize; i++ {
+		steps := <-stepsC
+		if steps != -1 && steps <= 50 {
+			locations++
+		}
+	}
+
+	fmt.Println(locations)
 }
 
 func LeeAlgorithm(maze []int, sideSize int, src, dst Coord) int {
