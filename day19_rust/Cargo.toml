@@ -1,0 +1,6 @@
+[package]
+name = "day19_rust"
+version = "0.1.0"
+authors = ["aQaTL <mmsoltys@outlook.com>"]
+
+[dependencies]
